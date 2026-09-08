@@ -18,7 +18,10 @@ $pageTitle = $pageTitle ?? SITE_NAME;
 <header class="site-header">
   <div class="container nav">
     <a class="brand" href="<?= url('/index.php') ?>">🎓 <?= e(SITE_NAME) ?></a>
-    <nav class="nav-links">
+    <button class="nav-toggle" id="navToggle" aria-label="เมนู" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="navLinks">
       <a href="<?= url('/index.php') ?>">หลักสูตร</a>
       <?php if ($u): ?>
         <a href="<?= url('/dashboard.php') ?>">ใบประกาศของฉัน</a>
@@ -33,6 +36,16 @@ $pageTitle = $pageTitle ?? SITE_NAME;
       <?php endif; ?>
     </nav>
   </div>
+  <script>
+    (function () {
+      var t = document.getElementById('navToggle'), n = document.getElementById('navLinks');
+      if (t && n) t.addEventListener('click', function () {
+        var open = n.classList.toggle('open');
+        t.classList.toggle('open', open);
+        t.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
 </header>
 <main class="container">
 <?php foreach (get_flashes() as $f): ?>
