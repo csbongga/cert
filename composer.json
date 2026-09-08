@@ -1,0 +1,8 @@
+{
+    "name": "local/cert-system",
+    "description": "ระบบออกใบประกาศออนไลน์ (PHP + MySQL)",
+    "require": {
+        "php": ">=7.4",
+        "mpdf/mpdf": "^8.2"
+    }
+}

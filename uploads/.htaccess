@@ -1,0 +1,6 @@
+# ป้องกันการรันสคริปต์ในโฟลเดอร์อัปโหลด (อนุญาตเฉพาะไฟล์ภาพ)
+php_flag engine off
+Options -Indexes
+<FilesMatch "\.(php|phtml|phar|pl|py|cgi|sh)$">
+  Require all denied
+</FilesMatch>

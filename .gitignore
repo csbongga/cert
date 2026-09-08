@@ -1,0 +1,24 @@
+# ===== Dependencies (ติดตั้งด้วย composer install) =====
+/vendor/
+composer.phar
+
+# ===== ไฟล์ตั้งค่าที่มีข้อมูลลับ (คัดลอกจาก config.example.php) =====
+config.php
+
+# ===== โฟลเดอร์ deploy (สร้างจาก source + มี vendor/creds จริง) =====
+/cert_deploy/
+
+# ===== ไฟล์ที่ผู้ใช้อัปโหลด/ระบบสร้าง (เฉพาะบนเซิร์ฟเวอร์) =====
+/uploads/templates/*
+/uploads/certs/*
+!/uploads/templates/.gitkeep
+!/uploads/certs/.gitkeep
+
+# ===== ไฟล์ตัวอย่าง/สำรอง/บีบอัด =====
+*.zip
+*.bak
+ตัวอย่างใบประกาศ.pdf
+
+# ===== ระบบ =====
+Thumbs.db
+.DS_Store
