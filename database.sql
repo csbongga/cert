@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `name_size`      TINYINT UNSIGNED NOT NULL DEFAULT 34,
   `course_top`     DECIMAL(5,1) NOT NULL DEFAULT 113.0,
   `course_size`    TINYINT UNSIGNED NOT NULL DEFAULT 22,
+  `detail_text`    VARCHAR(255) NULL,                    -- บรรทัดรายละเอียด (วันที่/สถานที่)
+  `detail_top`     DECIMAL(5,1) NOT NULL DEFAULT 133.0,
+  `detail_size`    TINYINT UNSIGNED NOT NULL DEFAULT 15,
   `show_meta`      TINYINT(1) NOT NULL DEFAULT 1,        -- แสดงวันที่ + รหัสใบประกาศด้านล่าง
   `is_active`      TINYINT(1) NOT NULL DEFAULT 1,
   `created_at`     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

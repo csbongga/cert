@@ -18,6 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nameSize  = max(8, (int)($_POST['name_size'] ?? 34));
     $courseTop = (float)($_POST['course_top'] ?? 113);
     $courseSize= max(8, (int)($_POST['course_size'] ?? 22));
+    $detailText= trim($_POST['detail_text'] ?? '');
+    $detailTop = (float)($_POST['detail_top'] ?? 133);
+    $detailSize= max(8, (int)($_POST['detail_size'] ?? 15));
     $showMeta  = isset($_POST['show_meta']) ? 1 : 0;
     $isActive  = isset($_POST['is_active']) ? 1 : 0;
 
@@ -37,11 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $upd = db()->prepare(
         'UPDATE courses SET title=?, description=?, pass_score=?, quiz_count=?,
-             name_top=?, name_size=?, course_top=?, course_size=?, show_meta=?,
+             name_top=?, name_size=?, course_top=?, course_size=?,
+             detail_text=?, detail_top=?, detail_size=?, show_meta=?,
              is_active=?, template_image=? WHERE id=?'
     );
     $upd->execute([$title, $desc, $pass, $quiz, $nameTop, $nameSize, $courseTop, $courseSize,
-        $showMeta, $isActive, $templateImage, $id]);
+        $detailText, $detailTop, $detailSize, $showMeta, $isActive, $templateImage, $id]);
 
     flash('success', 'บันทึกการตั้งค่าเรียบร้อย');
     redirect('/admin/course_edit.php?id=' . $id);
@@ -135,6 +139,25 @@ require __DIR__ . '/../includes/header.php';
           <input type="number" id="course_size" name="course_size" value="<?= (int)$course['course_size'] ?>">
         </div>
       </div>
+
+      <div class="field">
+        <label>รายละเอียดการอบรม (วันที่/สถานที่ — บรรทัดเดียว)</label>
+        <input type="text" id="detail_text" name="detail_text" maxlength="255"
+               value="<?= e($course['detail_text'] ?? '') ?>"
+               placeholder="เช่น วันที่ 10 กันยายน 2568 ณ ห้องประชุมคณะวิศวกรรมศาสตร์">
+        <div class="help">เว้นว่างไว้ = ไม่แสดงบรรทัดนี้บนใบประกาศ</div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>รายละเอียด — ระยะจากบน</label>
+          <input type="number" step="0.5" id="detail_top" name="detail_top" value="<?= e((string)($course['detail_top'] ?? 133)) ?>">
+        </div>
+        <div class="field">
+          <label>ขนาดฟอนต์รายละเอียด (pt)</label>
+          <input type="number" id="detail_size" name="detail_size" value="<?= (int)($course['detail_size'] ?? 15) ?>">
+        </div>
+      </div>
+
       <div class="field">
         <label><input type="checkbox" name="show_meta" <?= $course['show_meta'] ? 'checked' : '' ?>> แสดงเลขที่ใบประกาศ + วันที่ด้านล่าง</label>
       </div>
@@ -147,6 +170,7 @@ require __DIR__ . '/../includes/header.php';
         <img id="pvImg" src="<?= e($imgUrl) ?>" style="display:block;width:100%">
         <div id="pvName" style="position:absolute;left:0;width:100%;text-align:center;font-weight:bold;color:#1f2937">ชื่อ นามสกุล</div>
         <div id="pvCourse" style="position:absolute;left:0;width:100%;text-align:center;color:#374151"><?= e($course['title']) ?></div>
+        <div id="pvDetail" style="position:absolute;left:0;width:100%;text-align:center;color:#4b5563"><?= e($course['detail_text'] ?? '') ?></div>
       </div>
       <div id="previewEmpty" class="alert alert-warn" style="<?= $imgUrl ? 'display:none' : '' ?>">เลือกเทมเพลตจากคลังเพื่อดูตัวอย่าง</div>
       <p class="help">เลือกเทมเพลต + ปรับตัวเลขด้านซ้าย แล้วดูตำแหน่งได้ทันที (ค่าจริงจะบันทึกเมื่อกดบันทึก)</p>
@@ -168,11 +192,16 @@ require __DIR__ . '/../includes/header.php';
     var ns = parseFloat(document.getElementById('name_size').value) || 20;
     var ct = parseFloat(document.getElementById('course_top').value) || 0;
     var cs = parseFloat(document.getElementById('course_size').value) || 16;
+    var dt = parseFloat(document.getElementById('detail_top').value) || 0;
+    var ds = parseFloat(document.getElementById('detail_size').value) || 14;
     var name = document.getElementById('pvName'), crs = document.getElementById('pvCourse');
+    var det = document.getElementById('pvDetail');
     name.style.top = (nt / 210 * 100) + '%'; name.style.fontSize = pt2px(ns) + 'px';
     crs.style.top  = (ct / 210 * 100) + '%'; crs.style.fontSize  = pt2px(cs) + 'px';
+    det.style.top  = (dt / 210 * 100) + '%'; det.style.fontSize  = pt2px(ds) + 'px';
+    det.textContent = document.getElementById('detail_text').value;
   }
-  ['name_top','name_size','course_top','course_size'].forEach(function (id) {
+  ['name_top','name_size','course_top','course_size','detail_top','detail_size','detail_text'].forEach(function (id) {
     document.getElementById(id).addEventListener('input', upd);
   });
   // สลับภาพเทมเพลตเมื่อเลือก radio

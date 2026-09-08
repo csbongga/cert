@@ -20,6 +20,16 @@ function render_certificate_html(array $course, array $user, array $cert, string
     $showMeta   = (int)$course['show_meta'] === 1;
     $metaTop    = 198.0; // mm จากขอบบน
 
+    // บรรทัดรายละเอียดการอบรม (วันที่/สถานที่) — แสดงเมื่อมีข้อความ
+    $detailText = trim((string)($course['detail_text'] ?? ''));
+    $detailTop  = (float)($course['detail_top'] ?? 133);
+    $detailSize = (int)($course['detail_size'] ?? 15);
+    $detail = '';
+    if ($detailText !== '') {
+        $detail = '
+    <div class="detail">' . htmlspecialchars($detailText, ENT_QUOTES, 'UTF-8') . '</div>';
+    }
+
     $meta = '';
     if ($showMeta) {
         $meta = '
@@ -41,6 +51,10 @@ function render_certificate_html(array $course, array $user, array $cert, string
     position: absolute; left: 0; top: ' . $courseTop . 'mm; width: 297mm;
     text-align: center; font-size: ' . $courseSize . 'pt; color: #374151;
   }
+  .detail {
+    position: absolute; left: 0; top: ' . $detailTop . 'mm; width: 297mm;
+    text-align: center; font-size: ' . $detailSize . 'pt; color: #4b5563;
+  }
   .meta  { position: absolute; top: ' . $metaTop . 'mm; font-size: 11pt; color: #6b7280; }
   .metaL { left: 20mm; }
   .metaR { left: 0; width: 277mm; text-align: right; }
@@ -48,6 +62,6 @@ function render_certificate_html(array $course, array $user, array $cert, string
 <body>
   <img class="bg" src="' . $imgSrc . '" alt="">
   <div class="name">' . $name . '</div>
-  <div class="course">' . $title . '</div>' . $meta . '
+  <div class="course">' . $title . '</div>' . $detail . $meta . '
 </body></html>';
 }
