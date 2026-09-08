@@ -74,7 +74,7 @@ require __DIR__ . '/../includes/header.php';
       <h3>ข้อมูลหลักสูตร</h3>
       <div class="field">
         <label>ชื่อหลักสูตร</label>
-        <input type="text" name="title" value="<?= e($course['title']) ?>" required>
+        <input type="text" id="title" name="title" value="<?= e($course['title']) ?>" required>
       </div>
       <div class="field">
         <label>รายละเอียด</label>
@@ -199,9 +199,10 @@ require __DIR__ . '/../includes/header.php';
     name.style.top = (nt / 210 * 100) + '%'; name.style.fontSize = pt2px(ns) + 'px';
     crs.style.top  = (ct / 210 * 100) + '%'; crs.style.fontSize  = pt2px(cs) + 'px';
     det.style.top  = (dt / 210 * 100) + '%'; det.style.fontSize  = pt2px(ds) + 'px';
+    crs.textContent = document.getElementById('title').value;
     det.textContent = document.getElementById('detail_text').value;
   }
-  ['name_top','name_size','course_top','course_size','detail_top','detail_size','detail_text'].forEach(function (id) {
+  ['title','name_top','name_size','course_top','course_size','detail_top','detail_size','detail_text'].forEach(function (id) {
     document.getElementById(id).addEventListener('input', upd);
   });
   // สลับภาพเทมเพลตเมื่อเลือก radio
